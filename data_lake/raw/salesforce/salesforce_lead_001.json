@@ -1,0 +1,9 @@
+{
+    "lead_id": "lead_001",
+    "first_name": "John",
+    "last_name": "Doe",
+    "company": "ABC Technologies",
+    "email": "john.doe@example.com",
+    "phone": "+919876543210",
+    "created_date": "2026-09-09T00:00:00"
+}
