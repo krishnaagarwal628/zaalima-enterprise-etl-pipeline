@@ -88,3 +88,10 @@ Salesforce extraction: SUCCESS
 ============================================================
 Ingestion Pipeline Completed
 ============================================================
+
+### 📅 Daily Progress Log
+
+#### Week 1 - Day 3: Architecture Planning & API Mechanics Study
+- **Technical Research:** Studied Stripe cursor-based pagination (`starting_after`, `has_more`) and Salesforce REST/SOQL pagination mechanisms (`nextRecordsUrl`, `done` flag)[cite: 1].
+- **Pipeline Preparation:** Finalized data extraction flow and Pydantic validation mapping strategies for Day 4 implementation[cite: 1].
+- **Team Sync:** Documented API specs and modular file structure for upcoming extraction scripts[cite: 1].
