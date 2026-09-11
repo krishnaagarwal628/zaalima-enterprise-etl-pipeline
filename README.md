@@ -95,3 +95,8 @@ Ingestion Pipeline Completed
 - **Technical Research:** Studied Stripe cursor-based pagination (`starting_after`, `has_more`) and Salesforce REST/SOQL pagination mechanisms (`nextRecordsUrl`, `done` flag)[cite: 1].
 - **Pipeline Preparation:** Finalized data extraction flow and Pydantic validation mapping strategies for Day 4 implementation[cite: 1].
 - **Team Sync:** Documented API specs and modular file structure for upcoming extraction scripts[cite: 1].
+
+#### Week 1 - Days 4 & 5: SOQL & Cursor Pagination Implementation
+- **Salesforce Pagination:** Implemented SOQL query pagination handling using dynamic `nextRecordsUrl` tracking and `done` flag evaluation to extract full lead batches.
+- **Stripe Pagination:** Added cursor-based pagination loop utilizing `starting_after` parameters and `has_more` status checks.
+- **Data Lake Storage:** Updated extraction modules (`salesforce_extractor.py`, `stripe_extractor.py`) to consolidate validated multi-page records into JSON output files within `data_lake/raw/`.
