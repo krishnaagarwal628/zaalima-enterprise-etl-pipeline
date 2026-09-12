@@ -96,7 +96,8 @@ Ingestion Pipeline Completed
 - **Pipeline Preparation:** Finalized data extraction flow and Pydantic validation mapping strategies for Day 4 implementation[cite: 1].
 - **Team Sync:** Documented API specs and modular file structure for upcoming extraction scripts[cite: 1].
 
-#### Week 1 - Days 4 & 5: SOQL & Cursor Pagination Implementation
-- **Salesforce Pagination:** Implemented SOQL query pagination handling using dynamic `nextRecordsUrl` tracking and `done` flag evaluation to extract full lead batches.
-- **Stripe Pagination:** Added cursor-based pagination loop utilizing `starting_after` parameters and `has_more` status checks.
-- **Data Lake Storage:** Updated extraction modules (`salesforce_extractor.py`, `stripe_extractor.py`) to consolidate validated multi-page records into JSON output files within `data_lake/raw/`.
+#### Week 1 - Days 4 & 5: Stripe & Salesforce Pagination & Schema Validation
+- **Stripe Cursor Pagination:** Implemented cursor-based pagination loop utilizing `starting_after` parameter tracking and `has_more` boolean evaluations to extract full multi-page payment intent batches.
+- **Salesforce SOQL Pagination:** Built offset/SOQL-style pagination handling via dynamic `nextRecordsUrl` tracking and `done` flag assertion for complete lead extraction.
+- **Pydantic Schema Enforcement:** Integrated strict runtime validation using `StripePaymentSchema` and `SalesforceLeadSchema` before persisting records upstream.
+- **Bronze Lake Persistence:** Updated extraction outputs to consolidate validated multi-page batches into structured JSON datasets (`stripe_payments_paginated.json` & `salesforce_leads_paginated.json`) inside `data_lake/raw/`.
