@@ -1,0 +1,8 @@
+{
+    "transaction_id": "tx_103",
+    "amount": 1999.0,
+    "currency": "USD",
+    "customer_email": "customer3@example.com",
+    "status": "Failed",
+    "created_at": "2026-09-09T12:00:00Z"
+}
