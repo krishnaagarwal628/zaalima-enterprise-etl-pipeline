@@ -100,3 +100,8 @@ Ingestion Pipeline Completed
 - **Salesforce Pagination:** Implemented SOQL query pagination handling using dynamic `nextRecordsUrl` tracking and `done` flag evaluation to extract full lead batches.
 - **Stripe Pagination:** Added cursor-based pagination loop utilizing `starting_after` parameters and `has_more` status checks.
 - **Data Lake Storage:** Updated extraction modules (`salesforce_extractor.py`, `stripe_extractor.py`) to consolidate validated multi-page records into JSON output files within `data_lake/raw/`.
+
+#### Week 1 - Days 6 & 7: Centralized Pipeline Orchestration & Week 1 Wrap-up
+- **Pipeline Orchestrator (`main.py`):** Integrated `stripe_extractor` and `salesforce_extractor` into a single entry-point execution flow with dynamic error handling and module logging.
+- **End-to-End Extraction Verification:** Successfully validated multi-source ingestion, schema enforcement, and Bronze Data Lake persistence across Stripe and Salesforce modules.
+- **Repository Optimization:** Untracked virtual environments, standardized directory structures, and verified environment configuration for production readiness.

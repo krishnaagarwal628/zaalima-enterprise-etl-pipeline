@@ -1,10 +1,17 @@
 import os
-
+from tenacity import retry, stop_after_attempt, wait_exponential
 from dotenv import load_dotenv
 
 from models.schemas import StripePaymentSchema
 from data_lake.storage import save_to_local_lake
 
+# ---------------------------------------------------------
+# Retry Decorator: Network errors par 3 attempts tak exponential delay ke sath retry karega
+# ---------------------------------------------------------
+@retry(
+    stop=stop_after_attempt(3), 
+    wait=wait_exponential(multiplier=1, min=2, max=10)
+)
 
 
 def extract_stripe():
