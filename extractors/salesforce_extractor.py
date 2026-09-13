@@ -1,6 +1,7 @@
 import os
 import time
 from dotenv import load_dotenv
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 from models.schemas import SalesforceLeadSchema
 from data_lake.storage import save_to_local_lake
@@ -11,6 +12,14 @@ load_dotenv()
 
 SALESFORCE_API_URL = os.getenv("SALESFORCE_API_URL")
 
+
+# ---------------------------------------------------------
+# Retry Decorator: Network / API failure par retry simulation
+# ---------------------------------------------------------
+@retry(
+    stop=stop_after_attempt(3), 
+    wait=wait_exponential(multiplier=1, min=2, max=10)
+)
 
 
 def fetch_salesforce_soql_page (next_records_url= None):

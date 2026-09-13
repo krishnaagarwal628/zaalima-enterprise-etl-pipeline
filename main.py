@@ -5,7 +5,7 @@ from extractors.salesforce_extractor import extract_salesforce
 def main():
 
     print("=" * 60)
-    print("ZAALIMA ETL PIPELINE - DAY 2")
+    print("ZAALIMA ETL PIPELINE - WEEK 1 COMPLETE")
     print("Ingestion Pipeline Started")
     print("=" * 60)
 
