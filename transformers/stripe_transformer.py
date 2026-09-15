@@ -59,3 +59,55 @@ def handle_stripe_nulls(df: pd.DataFrame) -> pd.DataFrame:
     return df_clean
 
 
+def deduplicate_stripe_data(df: pd.DataFrame) -> pd.DataFrame:
+    df_clean = df.copy()
+    initial_count = len(df_clean)
+
+    df_clean = df_clean.drop_duplicates(subset=["transaction_id"], keep="last")
+
+    deduped_count = initial_count - len(df_clean)
+    if deduped_count > 0:
+        print(f"[INFO] Removed {deduped_count} duplicate record(s).")
+
+    return df_clean
+
+
+
+def clean_stripe_strings(df: pd.DataFrame) -> pd.DataFrame:
+    df_clean = df.copy()
+
+    string_cols = df_clean.select_dtypes(include=["object", "string"]).columns
+
+    for col in string_cols:
+        df_clean[col] = df_clean[col].astype(str).str.strip()
+
+    if "customer_email" in df_clean.columns:
+        df_clean["customer_email"] = df_clean["customer_email"].str.lower()
+
+    return df_clean
+
+
+def transform_stripe_data(
+    input_path: str, output_path: str = None
+) -> pd.DataFrame:
+    df = load_raw_stripe_data(input_path)
+    df = handle_stripe_nulls(df)
+    df = deduplicate_stripe_data(df)
+    df = clean_stripe_strings(df)
+
+    if output_path:
+        # Silver Layer storage directory check & create
+        out_dir = Path(output_path).parent
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        # Transformed clean JSON file write karna
+        df.to_json(output_path, orient="records", indent=4)
+        print(f"[SUCCESS] Transformed Silver data saved to: {output_path}")
+
+    return df
+
+if __name__ == "__main__":
+    raw_path = "data_lake/raw/stripe/stripe_tx_101.json"
+    silver_path = "data_lake/silver/stripe/stripe_tx_101_clean.json"
+
+    cleaned_df = transform_stripe_data(raw_path, output_path=silver_path)
