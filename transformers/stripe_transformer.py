@@ -87,6 +87,46 @@ def clean_stripe_strings(df: pd.DataFrame) -> pd.DataFrame:
     return df_clean
 
 
+
+
+
+def standardize_stripe_dates(df: pd.DataFrame) -> pd.DataFrame:
+    df_clean = df.copy()
+
+    if "created_at" in df_clean.columns:
+        # datetime string/epoch ko standard datetime object me convert karna
+        df_clean["created_at"] = pd.to_datetime(
+            df_clean["created_at"], errors="coerce"
+        )
+        # Standard string format YYYY-MM-DD HH:MM:SS format output
+        df_clean["created_at"] = df_clean["created_at"].dt.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
+
+    return df_clean
+
+
+
+
+
+def standardize_stripe_currency(df: pd.DataFrame) -> pd.DataFrame:
+    df_clean = df.copy()
+
+    if "currency" in df_clean.columns:
+        df_clean["currency"] = df_clean["currency"].astype(str).str.upper()
+
+    if "amount" in df_clean.columns:
+        df_clean["amount"] = pd.to_numeric(
+            df_clean["amount"], errors="coerce"
+        ).fillna(0.0)
+        df_clean["amount"] = df_clean["amount"].round(2)
+
+    return df_clean
+
+
+
+
+
 def transform_stripe_data(
     input_path: str, output_path: str = None
 ) -> pd.DataFrame:
@@ -94,6 +134,8 @@ def transform_stripe_data(
     df = handle_stripe_nulls(df)
     df = deduplicate_stripe_data(df)
     df = clean_stripe_strings(df)
+    df = standardize_stripe_dates(df)
+    df = standardize_stripe_currency(df)
 
     if output_path:
         # Silver Layer storage directory check & create
@@ -111,3 +153,5 @@ if __name__ == "__main__":
     silver_path = "data_lake/silver/stripe/stripe_tx_101_clean.json"
 
     cleaned_df = transform_stripe_data(raw_path, output_path=silver_path)
+    print("--- Transformed Data Output ---")
+    print(cleaned_df)
