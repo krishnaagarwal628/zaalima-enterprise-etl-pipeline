@@ -148,10 +148,3 @@ def transform_stripe_data(
 
     return df
 
-if __name__ == "__main__":
-    raw_path = "data_lake/raw/stripe/stripe_tx_101.json"
-    silver_path = "data_lake/silver/stripe/stripe_tx_101_clean.json"
-
-    cleaned_df = transform_stripe_data(raw_path, output_path=silver_path)
-    print("--- Transformed Data Output ---")
-    print(cleaned_df)
