@@ -148,3 +148,26 @@ def transform_stripe_data(
 
     return df
 
+def batch_transform_stripe_dir(
+    raw_dir: str = "data_lake/raw/stripe",
+    silver_dir: str = "data_lake/silver/stripe",
+):
+    """Dynamically scans raw directory and transforms all Stripe JSON files."""
+    raw_path = Path(raw_dir)
+    silver_path = Path(silver_dir)
+
+    if not raw_path.exists():
+        print(f"[WARNING] Raw directory {raw_dir} does not exist.")
+        return
+
+    json_files = list(raw_path.glob("*.json"))
+
+    if not json_files:
+        print(f"[INFO] No JSON files found in {raw_dir}.")
+        return
+
+    print(f"[INFO] Found {len(json_files)} raw Stripe file(s) to process.")
+
+    for file in json_files:
+        output_file = silver_path / f"{file.stem}_clean.json"
+        transform_stripe_data(str(file), str(output_file))

@@ -105,3 +105,18 @@ Ingestion Pipeline Completed
 - **Pipeline Orchestrator (`main.py`):** Integrated `stripe_extractor` and `salesforce_extractor` into a single entry-point execution flow with dynamic error handling and module logging.
 - **End-to-End Extraction Verification:** Successfully validated multi-source ingestion, schema enforcement, and Bronze Data Lake persistence across Stripe and Salesforce modules.
 - **Repository Optimization:** Untracked virtual environments, standardized directory structures, and verified environment configuration for production readiness.
+
+
+#### Week 2 - Days 1 to 3: Silver Layer Transformations & Standardizations
+- **Data Cleaning & Null Handling:** Built dedicated Pandas transformation scripts (`stripe_transformer.py`, `salesforce_transformer.py`) to handle missing values and filter invalid records.
+- **Format Normalization:** Standardized raw date strings into standard ISO 8601 timestamps and normalized multi-currency transaction values into decimal floats.
+- **Silver Persistence:** Landed processed, cleaned payloads into partitioned Silver Data Lake storage (`data_lake/silver/`).
+
+#### Week 2 - Days 4 & 5: Batch Processing & Central Pipeline Orchestration
+- **Dynamic Directory Scanning:** Added dynamic batch scanners (`batch_transform_stripe_dir`, `batch_transform_salesforce_dir`) to auto-discover and transform all raw JSON files in batch.
+- **Full Pipeline Orchestration:** Upgraded `main.py` to seamlessly orchestrate end-to-end processing across both Bronze (Raw Ingestion) and Silver (Transformation) layers.
+
+#### Week 2 - Days 6 & 7: Unified Schema Mapping & Pytest Validation
+- **Common Data Model (Unified Schema):** Built `unified_transformer.py` to map disparate source entities (Stripe `charge_id` / Salesforce `opportunity_id`) into a single standardized transaction model (`unified_silver.json`).
+- **Pytest Integration:** Created automated unit test suites (`tests/test_transformers.py`) to validate schema conversions, data types, and transformation integrity across modules.
+- **Week 2 Milestone Completion:** Verified full pipeline execution, green Pytest test suite, and merged tested codebase into `main`.
