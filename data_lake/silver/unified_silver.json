@@ -1,0 +1,9 @@
+[
+  {
+    "transaction_id":null,
+    "source_system":"stripe",
+    "event_timestamp":"2026-09-09 10:30:00",
+    "amount_in_usd":4999.0,
+    "status":"succeeded"
+  }
+]
