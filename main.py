@@ -1,3 +1,7 @@
+from database.init_db import init_db
+from loaders.db_loader import load_silver_json_to_db
+import glob
+import os
 from extractors.salesforce_extractor import extract_salesforce
 from extractors.stripe_extractor import extract_stripe
 from transformers.salesforce_transformer import batch_transform_salesforce_dir
@@ -48,6 +52,28 @@ def main():
         print("Salesforce transformation: SUCCESS")
     except Exception as error:
         print(f"Salesforce transformation: FAILED - {error}")
+
+    # ---------------------------------------------------------
+    # PHASE 3: Gold Warehouse Sync (Upsert to DB)
+    # ---------------------------------------------------------
+    print("\n[PHASE 3] Loading Cleaned Silver Data into Gold Warehouse...")
+    
+    # Initialize DB tables if not exist
+    init_db()
+
+    total_loaded = 0
+
+    # Sync Stripe Silver Cleaned Files
+    silver_stripe_pattern = os.path.join("data_lake", "silver", "stripe", "*.json")
+    for file_path in glob.glob(silver_stripe_pattern):
+        total_loaded += load_silver_json_to_db(file_path)
+
+    # Sync Salesforce Silver Cleaned Files
+    silver_sf_pattern = os.path.join("data_lake", "silver", "salesforce", "*.json")
+    for file_path in glob.glob(silver_sf_pattern):
+        total_loaded += load_silver_json_to_db(file_path)
+
+    print(f"\n[Gold Layer] Total Records Synced: {total_loaded}")
 
     # ---------------------------------------------------------
     # Pipeline completed
