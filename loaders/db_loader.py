@@ -7,9 +7,9 @@ from database.models import UnifiedTransaction
 
 
 def load_silver_json_to_db(json_filepath: str) -> int:
-    """Reads Silver layer cleaned JSON data and inserts records into the Database.
+    """Reads Silver layer cleaned JSON data and UPSERTS records into the Database.
 
-    Returns the count of successfully loaded records.
+    Uses db.merge() to prevent duplicate primary key errors and allow record updates.
     """
     if not os.path.exists(json_filepath):
         print(f"[ERROR] File not found: {json_filepath}")
@@ -20,33 +20,35 @@ def load_silver_json_to_db(json_filepath: str) -> int:
 
     records: List[Dict[str, Any]] = data if isinstance(data, list) else [data]
 
-    # Infer source system from path if missing in record
     fallback_source = "stripe" if "stripe" in json_filepath.lower() else "salesforce"
 
     db: Session = SessionLocal()
-    inserted_count = 0
+    processed_count = 0
 
     try:
         for record in records:
             source = record.get("source_system") or fallback_source
+            tx_id = str(record.get("transaction_id", record.get("id")))
 
             transaction = UnifiedTransaction(
-                transaction_id=str(record.get("transaction_id", record.get("id"))),
+                transaction_id=tx_id,
                 source_system=source,
                 event_timestamp=str(record.get("event_timestamp", record.get("created_at", ""))),
                 amount_in_usd=float(record.get("amount_in_usd", record.get("amount", 0.0))),
                 status=record.get("status", "unknown"),
             )
-            db.add(transaction)
-            inserted_count += 1
+
+            # db.merge() acts as an Upsert (Update if PK exists, Insert if PK is new)
+            db.merge(transaction)
+            processed_count += 1
 
         db.commit()
-        print(f"[SUCCESS] Successfully inserted {inserted_count} records into the database.")
-        return inserted_count
+        print(f"[SUCCESS] Upserted {processed_count} records into the database cleanly.")
+        return processed_count
 
     except Exception as e:
         db.rollback()
-        print(f"[ERROR] Failed to load data into database: {e}")
+        print(f"[ERROR] Upsert operation failed: {e}")
         return 0
     finally:
         db.close()
