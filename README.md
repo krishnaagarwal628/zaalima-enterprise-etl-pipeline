@@ -120,3 +120,19 @@ Ingestion Pipeline Completed
 - **Common Data Model (Unified Schema):** Built `unified_transformer.py` to map disparate source entities (Stripe `charge_id` / Salesforce `opportunity_id`) into a single standardized transaction model (`unified_silver.json`).
 - **Pytest Integration:** Created automated unit test suites (`tests/test_transformers.py`) to validate schema conversions, data types, and transformation integrity across modules.
 - **Week 2 Milestone Completion:** Verified full pipeline execution, green Pytest test suite, and merged tested codebase into `main`.
+
+#### Week 3 - Days 1 & 2: Data Warehouse Connection & ORM Modeling
+- **Dynamic Database Engine:** Built `database/connection.py` to manage dynamic SQLAlchemy connections using environment variables (`DATABASE_URL`).
+- **Unified Relational Schema:** Designed the `UnifiedTransaction` ORM model (`database/models.py`) to standardize transformed payment and lead records into a single Gold-layer schema.
+
+#### Week 3 - Days 3 & 4: Table Initialization & Baseline DB Loader
+- **Physical Schema Initialization:** Built `database/init_db.py` to auto-create missing tables and manage database migration logic safely.
+- **Baseline Ingestion Loader:** Developed `loaders/db_loader.py` to parse cleaned Silver JSON payloads and map them into ORM instances for database persistence.
+
+#### Week 3 - Days 5 & 6: Native SQLite Upserts & End-to-End Orchestration
+- **Anti-Duplication & Idempotency:** Implemented native SQLite `ON CONFLICT DO UPDATE` (upsert) logic in the loader to handle duplicate records cleanly without throwing primary key errors.
+- **Orchestrator Integration:** Upgraded `main.py` to execute end-to-end ingestion across Bronze, Silver, and Gold Data Warehouse layers in a single pipeline run.
+
+#### Week 3 - Day 7: Integration Testing & Pytest Suite
+- **Automated Verification:** Created `tests/test_db_loader.py` to test database insertions, idempotency updates, and graceful error handling.
+- **100% Pass Rate:** Validated pipeline stability and merged the complete Gold-layer data sync into `main`.
