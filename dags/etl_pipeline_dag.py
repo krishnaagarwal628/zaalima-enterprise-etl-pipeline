@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from utils.alerting import send_slack_alert
 
 # Project Imports
 from database.init_db import init_db
@@ -18,7 +19,8 @@ default_args = {
     "email_on_failure": False,
     "email_on_retry": False,
     "retries": 1,
-    "retry_delay": timedelta(minutes=5),
+    "retry_delay": timedelta(minutes=5),\
+    "on_failure_callback": send_slack_alert,
 }
 
 
