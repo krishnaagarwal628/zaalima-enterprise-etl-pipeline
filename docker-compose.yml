@@ -1,0 +1,23 @@
+
+
+services:
+  # ETL Pipeline Container
+  etl-app:
+    build: .
+    container_name: zaalima_etl_app
+    environment:
+      - PYTHONPATH=/app
+      - DATABASE_URL=sqlite:////app/data_lake/zaalima_warehouse.db
+    volumes:
+      - .:/app
+    command: python main.py
+
+  # Test Runner Container
+  etl-tests:
+    build: .
+    container_name: zaalima_etl_tests
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+    command: pytest tests/ -v
