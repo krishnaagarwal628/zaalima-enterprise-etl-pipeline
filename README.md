@@ -136,3 +136,27 @@ Ingestion Pipeline Completed
 #### Week 3 - Day 7: Integration Testing & Pytest Suite
 - **Automated Verification:** Created `tests/test_db_loader.py` to test database insertions, idempotency updates, and graceful error handling.
 - **100% Pass Rate:** Validated pipeline stability and merged the complete Gold-layer data sync into `main`.
+
+#### Week 4 - Days 1 to 3: Dockerization & Multi-Stage Environment Isolation
+- **Base Image & Optimization:** Authored a lean `Dockerfile` using `python:3.11-slim` to reduce container footprint and build times[cite: 2].
+- **Dependency Isolation:** Standardized `requirements.txt` execution within the container, preventing local environment bleed.
+- **Context Management:** Added `.dockerignore` rules to exclude local cache (`__pycache__`), virtual environment binaries, and local SQLite data warehouses (`data_lake/zaalima_warehouse.db`)[cite: 2].
+
+#### Week 4 - Days 4 & 5: Service Orchestration & Containerized Test Suite
+- **Docker Compose Setup:** Built `docker-compose.yml` to streamline container runtime settings and volume mappings[cite: 2].
+- **Automated Testing Suite:** Containerized `pytest` execution, allowing seamless multi-platform test suite verification without local Python setup[cite: 2].
+- **Volume & Network Security:** Secured container network paths and configured non-root app directory environments.
+
+#### Week 4 - Days 6 & 7: CI/CD Readiness, Final PR Merge & Deliverable Completion
+- **End-to-End Verification:** Verified full ETL pipeline execution and green test suite runs (7/7 tests passing) inside isolated Docker containers[cite: 2].
+- **Git Feature Workflow:** Managed `feature/week4-day6-dockerization` branch, resolved untracked artifacts, and completed pull request (PR) merge into `main`[cite: 2].
+- **Project Completion:** Finalized Week 4 production-ready documentation and clean main branch deployment state[cite: 2].
+
+---
+
+## 🐳 Docker Setup & Execution
+
+### 1. Build & Run Pipeline
+To build the Docker image and spin up the containerized ETL pipeline:
+```bash
+docker-compose up --build
